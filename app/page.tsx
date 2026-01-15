@@ -1,65 +1,157 @@
-import Image from "next/image";
+'use client';
+
+import React, { useState } from 'react';
+import Link from 'next/link';
+import { motion } from 'framer-motion';
+import { ArrowRight, Receipt as ReceiptIcon, TrendingUp, FileSearch, Users } from 'lucide-react';
+
+// Daten Import
+import { parties, receipts } from '@/lib/mockData';
+
+// Komponenten Import
+import SearchBar from '@/components/dashboard/SearchBar';
+import PartyCard from '@/components/dashboard/PartyCard';
+import TopicChips from '@/components/dashboard/TopicChips';
+import StatusBadge from '@/components/ui/StatusBadge';
+import { Button } from '@/components/ui/button';
+import FactCheckModal from '@/components/dashboard/FactCheckModal';
 
 export default function Home() {
+  // State Management
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Filter-Logik für die Quittungen
+  const filteredReceipts = receipts.filter(r => {
+    const matchesSearch = !searchQuery || 
+      r.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      r.quote.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    const matchesTopic = !selectedTopic || r.topic === selectedTopic;
+
+    return matchesSearch && matchesTopic;
+  });
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="min-h-screen bg-slate-50 font-sans text-slate-900">
+      
+      {/* 1. HERO SECTION */}
+      <div className="bg-slate-900 text-white rounded-b-[2.5rem] shadow-2xl relative overflow-hidden">
+        <div className="max-w-6xl mx-auto px-4 py-16 md:py-24 relative z-10 text-center">
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 border border-white/10 rounded-full text-xs font-semibold mb-8 backdrop-blur-sm tracking-wide uppercase">
+              <ReceiptIcon className="w-3 h-3" />
+              <span>Politische Transparenz</span>
+            </div>
+            
+            {/* Headline */}
+            <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight">QUITTUNG</h1>
+            <p className="text-lg text-slate-300 mb-10 max-w-lg mx-auto">
+              Vergleiche politische Rhetorik mit dem realen Abstimmungsverhalten.
+            </p>
+
+            {/* Suche & Live-Check */}
+            <div className="max-w-lg mx-auto mb-8 space-y-6">
+              <SearchBar value={searchQuery} onChange={setSearchQuery} />
+              
+              <div className="flex justify-center">
+                 <Button 
+                   variant="outline" 
+                   className="bg-white/10 border-white/20 text-white hover:bg-white/20 gap-2 px-6 py-6 text-md h-auto"
+                   onClick={() => setIsModalOpen(true)}
+                 >
+                   <FileSearch className="w-5 h-5" />
+                   Aussage live prüfen
+                 </Button>
+              </div>
+            </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+      </div>
+
+      <div className="max-w-6xl mx-auto px-4 py-12 space-y-16">
+        
+        {/* 2. PARTEIEN ÜBERSICHT */}
+        <section>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-bold text-slate-800">Parteien-Index</h2>
+          </div>
+          {/* Scrollbarer Container für Parteien */}
+          <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0">
+            {parties.map(party => (
+              <PartyCard key={party.id} party={party} />
+            ))}
+          </div>
+        </section>
+
+        {/* 3. POLITIKER CTA (Neu hinzugefügt) */}
+        <section>
+          <div className="bg-white border border-slate-200 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
+            <div className="flex items-center gap-4">
+              <div className="bg-slate-100 p-3 rounded-full hidden md:block">
+                <Users className="w-6 h-6 text-slate-600" />
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-slate-800 mb-1">Politiker im Check</h2>
+                <p className="text-slate-500 text-sm">Schau dir Profile und Scores einzelner Abgeordneter an.</p>
+              </div>
+            </div>
+            <Link href="/politicians">
+              <Button className="bg-slate-900 text-white hover:bg-slate-800 font-bold w-full md:w-auto">
+                Alle Politiker anzeigen <ArrowRight className="ml-2 w-4 h-4" />
+              </Button>
+            </Link>
+          </div>
+        </section>
+
+        {/* 4. QUITTUNGEN LISTE */}
+        <section>
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+            <h2 className="text-xl font-bold text-slate-800">Aktuelle Quittungen</h2>
+            <TopicChips selectedTopic={selectedTopic} onSelect={setSelectedTopic} />
+          </div>
+
+          {filteredReceipts.length > 0 ? (
+            <div className="grid gap-4 md:grid-cols-2">
+              {filteredReceipts.map((receipt, index) => (
+                <motion.div
+                  key={receipt.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.05 }}
+                >
+                  <Link href={`/receipt/${receipt.id}`}>
+                    <div className="bg-white rounded-2xl p-6 border border-slate-100 hover:border-slate-300 hover:shadow-lg transition-all duration-300 h-full group cursor-pointer">
+                      <div className="flex items-start justify-between mb-4">
+                        <StatusBadge status={receipt.status} />
+                        <span className="text-xs text-slate-400 font-medium uppercase">{receipt.topic}</span>
+                      </div>
+                      
+                      <h3 className="text-lg font-bold text-slate-800 mb-2 group-hover:text-emerald-700 transition-colors">
+                        {receipt.title}
+                      </h3>
+                      <p className="text-slate-500 italic mb-4 line-clamp-2">&quot;{receipt.quote}&quot;</p>
+                      
+                      <div className="flex items-center text-xs text-slate-400 mt-auto pt-4 border-t border-slate-50">
+                        <span>Abgleich vom {receipt.date}</span>
+                        <ArrowRight className="w-3 h-3 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </div>
+                    </div>
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-16 bg-white border border-slate-100 rounded-2xl">
+              <TrendingUp className="w-12 h-12 mx-auto mb-3 text-slate-200" />
+              <p className="text-slate-500 font-medium">Keine Ergebnisse gefunden.</p>
+            </div>
+          )}
+        </section>
+      </div>
+
+      {/* 5. DAS MODAL (Unsichtbar, bis Button geklickt wird) */}
+      <FactCheckModal open={isModalOpen} onOpenChange={setIsModalOpen} />
     </div>
   );
 }
