@@ -13,7 +13,8 @@ export default function Navbar() {
   const navLinks = [
     { name: 'Startseite', href: '/' },
     { name: 'Politiker', href: '/politicians' },
-    // Parteien-Übersicht fügen wir später hinzu, oder verlinken auf Home
+    { name: 'Parteien', href: '/parties' },
+    { name: 'Quittungen', href: '/receipt' },
   ];
 
   const isActive = (path: string) => pathname === path;

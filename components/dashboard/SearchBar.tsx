@@ -1,22 +1,34 @@
-import { Search } from 'lucide-react';
+"use client";
 
+import React from "react";
+import { Search } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+// FIX: Interface erweitert um optionale Props
 interface SearchBarProps {
-  value: string;
-  onChange: (value: string) => void;
+  value?: string;
+  onChange?: (value: string) => void;
+  placeholder?: string;
+  className?: string;
 }
 
-export default function SearchBar({ value, onChange }: SearchBarProps) {
+export default function SearchBar({
+  value,
+  onChange,
+  placeholder = "Suche nach Themen oder Personen...",
+  className,
+}: SearchBarProps) {
   return (
-    <div className="relative group w-full">
-      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-        <Search className="h-5 w-5 text-slate-400 group-focus-within:text-emerald-600 transition-colors" />
+    <div className={cn("relative w-full", className)}>
+      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+        <Search className="h-5 w-5 text-slate-400" />
       </div>
       <input
         type="text"
-        className="block w-full pl-11 pr-4 py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 backdrop-blur-md transition-all"
-        placeholder="Thema, Partei oder Politiker suchen..."
+        className="block w-full pl-10 pr-3 py-3 border border-slate-200 rounded-xl leading-5 bg-white placeholder-slate-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-slate-900 focus:border-transparent sm:text-sm transition-all shadow-sm hover:border-slate-300"
+        placeholder={placeholder}
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => onChange && onChange(e.target.value)}
       />
     </div>
   );

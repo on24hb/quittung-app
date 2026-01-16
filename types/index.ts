@@ -6,7 +6,6 @@ export interface Party {
   abbreviation: string;
   color: string;
   consistency_score: number;
-  // NEU: Diese Felder fehlten
   total_promises?: number;
   fulfilled_promises?: number;
 }
@@ -20,6 +19,7 @@ export interface ReceiptData {
   party_id: string;
   date: string;
   description?: string;
+  politician_id?: string;
 }
 
 export interface Politician {
@@ -38,7 +38,6 @@ export interface Politician {
   rebellion_count: number;
 }
 
-// NEU: Erweiterte Felder für Statement
 export interface Statement {
   id: string;
   politician_id: string;

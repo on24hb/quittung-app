@@ -63,7 +63,6 @@ export default function Home() {
           </div>
         </div>
 
-        <TopicChips selectedTopic={selectedTopic} onSelect={setSelectedTopic} />
       </section>
 
       {/* 2. PARTEIEN VORSCHAU */}
@@ -96,6 +95,9 @@ export default function Home() {
                 <h2 className="text-2xl font-bold text-slate-900">Aktuelle Quittungen</h2>
                 <p className="text-slate-500 mt-1">Die neuesten Abgleiche aus dem Parlament.</p>
             </div>
+          </div>
+          <div className="mb-8">
+          <TopicChips selectedTopic={selectedTopic} onSelect={setSelectedTopic} />
           </div>
 
           {filteredReceipts.length > 0 ? (
