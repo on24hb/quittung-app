@@ -6,46 +6,44 @@ interface GaugeProps {
   strokeWidth?: number;
 }
 
-export default function ConsistencyGauge({ score, size = 64, strokeWidth = 5 }: GaugeProps) {
+export default function ConsistencyGauge({ score, size = 80, strokeWidth = 6 }: GaugeProps) {
   const radius = (size - strokeWidth) / 2;
   const circumference = radius * 2 * Math.PI;
   const offset = circumference - (score / 100) * circumference;
   
-  // Farben je nach Score: Grün (>75), Gelb (>50), Rot (Rest)
-  const color = score > 75 ? '#059669' : score > 50 ? '#d97706' : '#e11d48';
+  const getColor = (s: number) => {
+    if (s >= 70) return '#10b981'; // Emerald
+    if (s >= 40) return '#f59e0b'; // Amber
+    return '#dc2626'; // Crimson
+  };
 
   return (
-    <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
-      {/* Hintergrund-Kreis (Grau) */}
-      <svg className="transform -rotate-90 w-full h-full">
+    <div className="relative inline-flex items-center justify-center">
+      <svg width={size} height={size} className="transform -rotate-90">
         <circle
-          className="text-slate-100"
-          strokeWidth={strokeWidth}
-          stroke="currentColor"
-          fill="transparent"
-          r={radius}
           cx={size / 2}
           cy={size / 2}
-        />
-        {/* Füll-Kreis (Farbig) */}
-        <circle
-          stroke={color}
+          r={radius}
+          stroke="#e2e8f0"
           strokeWidth={strokeWidth}
+          fill="none"
+        />
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          stroke={getColor(score)}
+          strokeWidth={strokeWidth}
+          fill="none"
           strokeDasharray={circumference}
           strokeDashoffset={offset}
           strokeLinecap="round"
-          fill="transparent"
-          r={radius}
-          cx={size / 2}
-          cy={size / 2}
-          className="transition-all duration-1000 ease-out"
+          className="transition-all duration-700 ease-out"
         />
       </svg>
-      
-      {/* Prozentzahl in der Mitte */}
-      <span className="absolute text-xs font-bold text-slate-700">
-        {score}%
-      </span>
+      <div className="absolute inset-0 flex items-center justify-center">
+        <span className="text-lg font-semibold text-slate-800">{score}%</span>
+      </div>
     </div>
   );
 }

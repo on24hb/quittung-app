@@ -5,8 +5,10 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { ArrowLeft, User, MapPin, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { politicians, parties, statements } from '@/lib/mockData';
+import { politicians, parties, statements, votes } from '@/lib/mockData';
 import ConsistencyMeter from '@/components/ui/ConsistencyMeter';
+import LoyaltyMeter from '@/components/politician/LoyaltyMeter';
+import WordVsVoteCard from '@/components/politician/WordVsVoteCard';
 
 export default function PoliticianProfilePage() {
   const params = useParams();
@@ -20,7 +22,7 @@ export default function PoliticianProfilePage() {
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans">
-      {/* Header */}
+      {/* Header bleibt gleich ... */}
       <div className="bg-white border-b border-slate-100">
         <div className="max-w-4xl mx-auto px-4 py-6">
           <Link href="/politicians">
@@ -74,7 +76,7 @@ export default function PoliticianProfilePage() {
               )}
             </div>
 
-            {/* Score */}
+            {/* Score mit neuem Popover */}
             <div className="shrink-0 flex flex-col items-center">
               <ConsistencyMeter score={politician.personal_consistency_score} size={80} strokeWidth={6} />
               <p className="text-xs font-bold text-slate-500 mt-2 uppercase tracking-wide">Konsistenz</p>
@@ -83,22 +85,32 @@ export default function PoliticianProfilePage() {
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 py-8 space-y-6">
-        {/* Timeline Placeholder */}
-        <div className="bg-white rounded-2xl border border-slate-100 p-6">
+      <div className="max-w-4xl mx-auto px-4 py-8 space-y-8">
+        
+        {/* NEU: Loyalty Meter */}
+        <LoyaltyMeter 
+           loyaltyScore={politician.party_loyalty_score} 
+           rebellionCount={politician.rebellion_count} 
+           rebellionReason="Abweichung bei der Abstimmung zum Sondervermögen aus Gewissensgründen."
+        />
+
+        {/* NEU: Word vs Vote Cards */}
+        <div>
             <h2 className="text-lg font-bold text-slate-800 mb-6">Wort vs. Tat Timeline</h2>
             
             {politicianStatements.length > 0 ? (
                 <div className="space-y-6">
-                    {politicianStatements.map(stmt => (
-                        <div key={stmt.id} className="relative pl-6 border-l-2 border-slate-200">
-                            <div className="absolute -left-1.5 top-0 w-3 h-3 rounded-full bg-slate-300"></div>
-                            <div className="text-xs text-slate-400 font-mono mb-1">{stmt.date}</div>
-                            {/* Anführungszeichen korrigiert */}
-                            <p className="text-slate-800 font-medium italic mb-2">&quot;{stmt.text}&quot;</p>
-                            <div className="text-xs text-slate-500 bg-slate-50 inline-block px-2 py-1 rounded">Quelle: {stmt.source}</div>
-                        </div>
-                    ))}
+                    {politicianStatements.map(stmt => {
+                        // Passende Abstimmung finden
+                        const vote = votes.find(v => v.id === stmt.vote_id);
+                        return (
+                            <WordVsVoteCard 
+                                key={stmt.id} 
+                                statement={stmt} 
+                                vote={vote} 
+                            />
+                        );
+                    })}
                 </div>
             ) : (
                 <div className="text-center py-10 text-slate-400">Keine Daten verfügbar</div>

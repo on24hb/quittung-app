@@ -6,6 +6,9 @@ export interface Party {
   abbreviation: string;
   color: string;
   consistency_score: number;
+  // NEU: Diese Felder fehlten
+  total_promises?: number;
+  fulfilled_promises?: number;
 }
 
 export interface ReceiptData {
@@ -16,18 +19,18 @@ export interface ReceiptData {
   status: Status;
   party_id: string;
   date: string;
-  description?: string; // Erklärungstext für Details
+  description?: string;
 }
 
 export interface Politician {
   id: string;
   full_name: string;
   party_id: string;
-  position: string; // z.B. "MdB", "Bundeskanzler"
+  position: string;
   wahlkreis?: string;
   fraktion?: string;
   ausschuss?: string[];
-  portrait_url?: string; // URL zum Bild
+  portrait_url?: string;
   bundestag_email?: string;
   abgeordnetenwatch_url?: string;
   personal_consistency_score: number;
@@ -35,19 +38,27 @@ export interface Politician {
   rebellion_count: number;
 }
 
+// NEU: Erweiterte Felder für Statement
 export interface Statement {
   id: string;
   politician_id: string;
-  vote_id?: string; // Verknüpfung zur Abstimmung
+  vote_id?: string;
   date: string;
   text: string;
   source: string;
-  context: string;
+  context?: string;
+  // UI-spezifische Felder
+  quote?: string;
+  source_type?: string;
+  source_url?: string;
+  alignment?: 'consistent' | 'contradicted' | 'unclear';
 }
 
 export interface Vote {
   id: string;
   title: string;
   date: string;
-  result: string; // "Angenommen", "Abgelehnt"
+  result: string;
+  // Optional, da nicht immer vorhanden
+  party_position?: 'yes' | 'no' | 'abstain';
 }
