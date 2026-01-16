@@ -70,9 +70,6 @@ export default function LoyaltyMeter({ loyaltyScore, rebellionCount, rebellionRe
             <div className="flex-1">
               {/* FEHLER BEHOBEN: &quot; statt " */}
               <p className="text-sm font-medium text-amber-900 mb-1">
-                Der &quot;Rebell&quot;-Faktor
-              </p>
-              <p className="text-sm text-amber-800 mb-2">
                 {rebellionCount} {rebellionCount === 1 ? 'Abstimmung' : 'Abstimmungen'} gegen die Parteilinie
               </p>
               {rebellionReason && (

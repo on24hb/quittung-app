@@ -52,7 +52,6 @@ export default function ReceiptDetailPage() {
             {/* Promise */}
             <div className="relative pl-6 border-l-4 border-emerald-500/30">
                <h3 className="text-xs font-bold text-emerald-700 uppercase mb-2 tracking-wide">Das Versprechen</h3>
-               {/* FEHLER BEHOBEN: &quot; statt " benutzt */}
                <p className="text-xl md:text-2xl font-serif text-slate-700 italic leading-relaxed">
                  &quot;{receipt.quote}&quot;
                </p>

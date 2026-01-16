@@ -7,11 +7,11 @@ import { ArrowRight, Receipt as ReceiptIcon, TrendingUp, Users } from 'lucide-re
 
 import { parties, receipts } from '@/lib/mockData';
 import SearchBar from '@/components/dashboard/SearchBar';
-import PartyCard from '@/components/dashboard/PartyCard'; // FIX: Default Import
+import PartyCard from '@/components/dashboard/PartyCard'; 
 import TopicChips from '@/components/dashboard/TopicChips';
 import StatusBadge from '@/components/ui/StatusBadge';
 import { Button } from '@/components/ui/button';
-import FactCheckModal from '@/components/dashboard/FactCheckModal'; // FIX: Default Import
+import FactCheckModal from '@/components/dashboard/FactCheckModal'; 
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState('');

@@ -1,10 +1,16 @@
+'use client';
+
 import Link from 'next/link';
 import { receipts } from '@/lib/mockData'; // FIX: Named Import
 import StatusBadge from '@/components/ui/StatusBadge'; // Default Import (angepasst an deine Struktur)
 import SearchBar from '@/components/dashboard/SearchBar';
 import { ReceiptData } from '@/types'; // Importiere den Type für Typsicherheit
+import TopicChips from '@/components/dashboard/TopicChips';
+import { useState } from 'react';
 
 export default function ReceiptsPage() {
+   const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
+
   return (
     <main className="min-h-screen bg-slate-50 py-12 px-4 md:px-6">
       <div className="max-w-6xl mx-auto">
@@ -17,7 +23,6 @@ export default function ReceiptsPage() {
 
         {/* Filter / Suche */}
         <div className="mb-8 max-w-xl">
-             {/* FIX: SearchBar muss aktualisiert werden (siehe unten), damit 'placeholder' erlaubt ist */}
              <SearchBar placeholder="Suche nach Themen, Politikern oder Parteien..." />
         </div>
 

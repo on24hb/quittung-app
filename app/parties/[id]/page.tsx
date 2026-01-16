@@ -98,8 +98,10 @@ export default function PartyDetailPage() {
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-bold text-slate-800">Versprechen & Taten</h2>
+            </div>
+            <div className="mb-8">
             <TopicChips selectedTopic={selectedTopic} onSelect={setSelectedTopic} />
-          </div>
+            </div>          
 
           <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-sm">
             {filteredReceipts.length > 0 ? (
