@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Loader2, FileSearch, X, ExternalLink, ArrowRight } from 'lucide-react';
+import { Search, Loader2, FileSearch, X, ExternalLink } from 'lucide-react'; // FIX: ArrowRight entfernt
 import { Button } from '@/components/ui/button';
 import StatusBadge from '@/components/ui/StatusBadge';
 import { motion, AnimatePresence } from 'framer-motion';
